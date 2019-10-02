@@ -6,7 +6,11 @@ This code solves ПАСЬЯНС solitaire as implemented in Exapunks (not intend
 
 Currently, the code expects the game to be running in a 1920x1080 window, unobscured, anywhere on the screen, and expects a 2x DPI screen (e.g. Mac Retina). To make it work with other resolutions or DPI scales, edit the pixel offsets found in `config.json`. The computer vision algorithm used to identify cards is OpenCV's template matching, and so when running in other resolutions you should also replace the card sprites found in `card_back/` with resolution appropriate ones.
 
-## Example usage
+### Example of graphical autoplay
+
+![Graphical autoplay using exa_gui.py](manual/visual_out.gif)
+
+### Offline solving a randomly generated game
 
 ![Terminal output of exa_logic.png](manual/terminal.svg)
 
