@@ -1,13 +1,13 @@
 import glob
 import json
 import math
-import six
 import sys
+import time
 import cv2
+import mss
 import numpy as np
 import pyautogui
-import time
-import mss
+import six
 from PIL import Image
 import exa_logic
 

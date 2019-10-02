@@ -69,7 +69,7 @@ class Stack:
 
 		# If it's a stack and there are cards and the card you're moving doesn't match the last card on the stack, not valid
 		if self.type == "stack" and len(self.stack) and not self.compatible(self.stack[-1], card[0]):
-			return 0	
+			return 0
 
 		return 1
 
@@ -220,7 +220,7 @@ class Game:
 		stack_hashes = [x for x in hash.split("/") if len(x)]
 		for stack in stack_hashes:
 			stack_type = "stack" if stack[0] == "S" else "freecell"
-			
+
 			past_card = "ZZ"
 
 			if len(stack) == 1:
@@ -240,7 +240,7 @@ class Game:
 				new_stack.past_cards = past_card
 
 			stack_set.append(new_stack)
-		
+
 		# Overwrite the game's whole stack set with the stacks.
 		self.stacks = stack_set
 
@@ -404,7 +404,7 @@ class Game:
 				result_moves = self.play_game(current.move_history, print_level)
 				done = 1
 				break
-			
+
 			# If not, let's play -- what are my current descendents?
 			results = current.solve()
 			if results is not None:
@@ -474,7 +474,7 @@ class Game:
 		# Results
 		return results
 
-# What do we do if this is executed directly?			
+# What do we do if this is executed directly?
 if __name__ == "__main__":
 	my_game = Game()
 	my_game.deal_cards()
