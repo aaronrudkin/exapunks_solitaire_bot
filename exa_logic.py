@@ -2,6 +2,7 @@ from collections import deque
 from timeit import default_timer as timer
 import random
 import copy
+import time
 
 class Stack:
 	""" A stack is a place where cards can go; types are 'stack' and 'freecell'. """
@@ -477,5 +478,7 @@ class Game:
 if __name__ == "__main__":
 	my_game = Game()
 	my_game.deal_cards()
+
 	print(my_game)
-	my_game.global_solve(1)
+	time.sleep(0.5)
+	my_game.global_solve(0)
