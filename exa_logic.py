@@ -18,11 +18,7 @@ class Stack(object):
 
     face_values = ["H", "S", "C", "D"]
     num_values = ["6", "7", "8", "9"]
-    face_cards = ["HH", "SS", "CC", "DD"] * 4
-    number_cards = [
-        "0B", "0R", "9B", "9R", "8B",
-        "8R", "7B", "7R", "6B", "6R"
-    ] * 2
+    face_cards = ["HH", "SS", "CC", "DD"]
 
     def __init__(self, card_type, locked):
         self.card_type = card_type
@@ -131,7 +127,7 @@ class Stack(object):
 
         # If we just created a collapse, handle the collapse
         if (len(self.stack) == 4 and self.stack == [self.stack[0]] * 4 and
-                self.stack[0] in self.face_cards):
+                self.stack[0] in self.__class__.face_cards):
             # Lock the stack, save which card type was in the lock for user
             # debug, mark the stack cards as X
             self.locked = True
@@ -209,6 +205,12 @@ class Game(object):
     of plausible moves, as well as a meta-solver function that solves the game.
     """
 
+    face_cards = ["HH", "SS", "CC", "DD"] * 4
+    number_cards = [
+        "0B", "0R", "9B", "9R", "8B",
+        "8R", "7B", "7R", "6B", "6R"
+    ] * 2
+
     def __init__(self, card_stacks=9, freecells=1, max_depth=100):
         """
         Initial setup of the stacks and free cells; 'how_many_free' is the
@@ -261,7 +263,7 @@ class Game(object):
         """ If we don't have a game in mind, generate a random one. """
 
         # 6-10 black and red * 2, 4x each face color
-        cards = self.face_cards + self.number_cards
+        cards = self.__class__.face_cards + self.__class__.number_cards
 
         # Shuffle
         random.shuffle(cards)
