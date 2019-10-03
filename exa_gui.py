@@ -30,7 +30,8 @@ def anchor_and_clip(image):
 
     crop_image = image[
         y:y + CONFIG["max_window_y"],
-        x:x + CONFIG["max_window_x"]]
+        x:x + CONFIG["max_window_x"]
+    ]
     return x, y, crop_image
 
 
@@ -56,17 +57,24 @@ def read_stacks(image):
     for x_stack in range(CONFIG["number_stacks"]):
         stack = []
         for y_stack in range(CONFIG["cards_per_stack_base"]):
-            coord_x = (CONFIG["base_stack_offset_x"] +
-                       (CONFIG["stack_width"] * x_stack))
-            coord_y = (CONFIG["base_stack_offset_y"] +
-                       (CONFIG["stack_height"] * y_stack))
+            coord_x = (
+                CONFIG["base_stack_offset_x"] +
+                (CONFIG["stack_width"] * x_stack)
+            )
+            coord_y = (
+                CONFIG["base_stack_offset_y"] +
+                (CONFIG["stack_height"] * y_stack)
+            )
             crop_image = image[
                 coord_y:coord_y + CONFIG["card_sprite_y"],
-                coord_x:coord_x + CONFIG["card_sprite_x"]]
+                coord_x:coord_x + CONFIG["card_sprite_x"]
+            ]
 
             result_scores = [
                 cv2.matchTemplate(crop_image, cards[i], cv2.TM_SQDIFF)
-                for i in range(len(cards))]
+                for i in range(len(cards))
+            ]
+
             card_type = card_names[result_scores.index(min(result_scores))]
             stack.append(card_type)
 
@@ -86,7 +94,8 @@ def computer_hash(my_image):
     freecell_hash = "".join(["F/" if x == 0 else "FL/" for x in freecells])
     stacks = read_stacks(my_image)
     stack_hash = "".join(
-        ["S%s/" % "".join([str(s) for s in stack]) for stack in stacks])
+        ["S%s/" % "".join([str(s) for s in stack]) for stack in stacks]
+    )
     print("Done. Game detected.")
     return [offset_screen_x, offset_screen_y, stack_hash + freecell_hash]
 
@@ -105,7 +114,8 @@ def grab_screenshot():
         monitor = screenshot.monitors[0]
         shot = screenshot.grab(monitor)
         frame = np.array(
-            Image.frombytes("RGB", (shot.width, shot.height), shot.rgb))
+            Image.frombytes("RGB", (shot.width, shot.height), shot.rgb)
+        )
         frame_2 = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     return computer_hash(frame_2)
 
@@ -119,7 +129,8 @@ def execute_solution(offset_x, offset_y, moves):
         CONFIG["resolution_scale_click"],
         (offset_y + CONFIG["window_click_offset_y"]) *
         CONFIG["resolution_scale_click"],
-        button="left")
+        button="left"
+    )
     time.sleep(CONFIG["base_delay"] * 3)
     pyautogui.mouseUp()
     time.sleep(CONFIG["base_delay"] * 5)
@@ -135,58 +146,68 @@ def execute_solution(offset_x, offset_y, moves):
                 offset_x +
                 CONFIG["base_stack_offset_x"] +
                 (CONFIG["stack_width"] * x_pre) +
-                CONFIG["click_offset_x"])
+                CONFIG["click_offset_x"]
+            )
             y_pre_final = (
                 offset_y +
                 CONFIG["base_stack_offset_y"] +
                 (CONFIG["stack_height"] * y_pre) +
-                CONFIG["click_offset_y"])
+                CONFIG["click_offset_y"]
+            )
         # Separate offsets for freecell
         else:
             x_pre_final = (
                 offset_x +
                 CONFIG["freecell_offset_x"] +
                 (CONFIG["stack_width"] * (x_pre - CONFIG["number_stacks"])) +
-                CONFIG["click_offset_x"])
+                CONFIG["click_offset_x"]
+            )
             y_pre_final = (
                 offset_y +
                 CONFIG["freecell_offset_y"] +
-                CONFIG["click_offset_y"])
+                CONFIG["click_offset_y"]
+            )
 
         if x_post < CONFIG["number_stacks"]:
             x_post_final = (
                 offset_x +
                 CONFIG["base_stack_offset_x"] +
                 (CONFIG["stack_width"] * x_post) +
-                CONFIG["click_offset_x"])
+                CONFIG["click_offset_x"]
+            )
             y_post_final = (
                 offset_y +
                 CONFIG["base_stack_offset_y"] +
                 (CONFIG["stack_height"] * y_post) +
-                CONFIG["click_offset_y"])
+                CONFIG["click_offset_y"]
+            )
         else:
             x_post_final = (
                 offset_x +
                 CONFIG["freecell_offset_x"] +
                 (CONFIG["stack_width"] * (x_post - CONFIG["number_stacks"])) +
-                CONFIG["click_offset_x"])
+                CONFIG["click_offset_x"]
+            )
             y_post_final = (
                 offset_y +
                 CONFIG["freecell_offset_y"] +
-                CONFIG["click_offset_y"])
+                CONFIG["click_offset_y"]
+            )
 
         # Move the mouse to the beginning place
         pyautogui.moveTo(
             x_pre_final * CONFIG["resolution_scale_click"],
             y_pre_final * CONFIG["resolution_scale_click"],
-            duration=CONFIG["base_delay"])
+            duration=CONFIG["base_delay"]
+        )
 
         # Click and drag to the end
         pyautogui.dragTo(
             x_post_final * CONFIG["resolution_scale_click"],
             y_post_final * CONFIG["resolution_scale_click"],
             duration=CONFIG["base_delay"],
-            button="left")
+            button="left"
+        )
 
         # Wait for a while
         time.sleep(CONFIG["base_delay"])
@@ -200,7 +221,8 @@ def click_new_game(offset_x, offset_y):
         CONFIG["resolution_scale_click"],
         (offset_y + CONFIG["new_game_offset_y"]) *
         CONFIG["resolution_scale_click"],
-        button="left")
+        button="left"
+    )
     time.sleep(CONFIG["base_delay"] * 3)
     pyautogui.mouseUp()
     time.sleep(CONFIG["base_delay"] * 5)

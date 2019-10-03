@@ -15,6 +15,15 @@ class Stack(object):
     """
     A stack is a place where cards can go; types are 'stack' and 'freecell'.
     """
+
+    face_values = ["H", "S", "C", "D"]
+    num_values = ["6", "7", "8", "9"]
+    face_cards = ["HH", "SS", "CC", "DD"] * 4
+    number_cards = [
+        "0B", "0R", "9B", "9R", "8B",
+        "8R", "7B", "7R", "6B", "6R"
+    ] * 2
+
     def __init__(self, card_type, locked):
         self.card_type = card_type
         self.locked = locked
@@ -50,8 +59,8 @@ class Stack(object):
 
         self.stack = cards
 
-    @staticmethod
-    def compatible(top, bottom):
+    @classmethod
+    def compatible(cls, top, bottom):
         """
         Tests compatibility of two cards -- can bottom be placed under top in
         a solitaire context?
@@ -59,16 +68,14 @@ class Stack(object):
         top_str, top_suit = list(top)
         bottom_str, bottom_suit = list(bottom)
 
-        if top_suit == bottom_suit and top_str in ["H", "S", "C", "D"]:
+        if top_suit == bottom_suit and top_str in cls.face_values:
             return 1
 
-        if (top_str in ["H", "S", "C", "D"] or
-                bottom_str in ["H", "S", "C", "D"]):
+        if (top_str in cls.face_values or bottom_str in cls.face_values):
             return 0
 
-        top_number = int(top_str) if top_str in ["6", "7", "8", "9"] else 10
-        bottom_number = (int(bottom_str) if
-                         bottom_str in ["6", "7", "8", "9"] else 10)
+        top_number = int(top_str) if top_str in cls.num_values else 10
+        bottom_number = int(bottom_str) if bottom_str in cls.num_values else 10
 
         if bottom_number == top_number - 1 and top_suit != bottom_suit:
             return 1
@@ -124,7 +131,7 @@ class Stack(object):
 
         # If we just created a collapse, handle the collapse
         if (len(self.stack) == 4 and self.stack == [self.stack[0]] * 4 and
-                self.stack[0] in ["HH", "SS", "CC", "DD"]):
+                self.stack[0] in self.face_cards):
             # Lock the stack, save which card type was in the lock for user
             # debug, mark the stack cards as X
             self.locked = True
@@ -188,6 +195,7 @@ class Stack(object):
         if self.stack == "X":
             return 1
 
+        # The two different patterns of complete number cards
         if (self.stack == ["0R", "9B", "8R", "7B", "6R"] or
                 self.stack == ["0B", "9R", "8B", "7R", "6B"]):
             return 1
@@ -253,10 +261,7 @@ class Game(object):
         """ If we don't have a game in mind, generate a random one. """
 
         # 6-10 black and red * 2, 4x each face color
-        cards = list(["HH", "SS", "CC", "DD"]) * 4 + list(["0B", "0R", "9B",
-                                                           "9R", "8B", "8R",
-                                                           "7B", "7R", "6B",
-                                                           "6R"]) * 2
+        cards = self.face_cards + self.number_cards
 
         # Shuffle
         random.shuffle(cards)
@@ -278,7 +283,7 @@ class Game(object):
         for stack in stack_hashes:
             stack_type = "stack" if stack[0] == "S" else "freecell"
 
-            past_card = "ZZ"
+            past_card = -1
 
             if len(stack) == 1:
                 cards = []
@@ -320,6 +325,7 @@ class Game(object):
                 score = score + 10
             # Stack with cards? 5 - the number of inaccessible cards.
             elif i.card_type == "stack" and i.stack:
+                # What does a complete stack look like?
                 if (len(i.stack) == 5 and
                     (i.stack == ["0R", "9B", "8R", "7B", "6R"] or
                      i.stack == ["0B", "9R", "8B", "7R", "6B"])):
