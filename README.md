@@ -14,7 +14,11 @@ Currently, the code expects the game to be running in a 1920x1080 window, unobsc
 
 ![Terminal output of exa_logic.png](manual/terminal.svg)
 
-## `config.json` syntax
+### Installation and requirements
+
+Clone this repository. The offline solution AI, `exa_logic.py`, has no external dependencies and runs in pure Python2 or Python3. To allow screen reading and automated graphical solution, install external dependencies using `pip install -r requirements.txt`. You may also need to install system level libraries for OpenCV. 
+
+### `config.json` syntax
 
 ```
 {
