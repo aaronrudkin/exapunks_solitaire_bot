@@ -50,3 +50,9 @@ Clone this repository. The offline solution AI, `exa_logic.py`, has no external 
 Two notes:
 1. The default values are calibrated for a 1920x1080 window
 2. The offsets should not take into account DPI -- `resolution_scale_click` is the only setting that controls monitor DPI
+
+### Algorithm details
+
+The solver is implemented as a greedy (best-first) search. Given a game state, evaluate all possible legal moves (excluding those which lead to previously visited game states). Score each legal move. Add the moves to an array and sort by score descending. Visit the first move on the list. Continue until the queue of moves is exhausted (loss condition) or the game is solved. The algorithm also prohibits chains of moves longer than length 100, although in practice all games are solvable in fewer moves.
+
+Although this approach is not guaranteed to be minimal length, computation is extremely quick and the algorithm is resilient to local maxima. The score function implemented is simple: Each complete stack is worth 20 points. Each empty slot is worth 10 points. Each incomplete stack is worth 5 points less the number of cards that are inaccessible. Of course, these values are arbitrary and any scores will produce a solution if one exists.
