@@ -15,6 +15,7 @@ import pyautogui
 import six
 from PIL import Image
 import exa_logic
+from pathlib import Path
 
 CONFIG = json.load(open("config.json"))
 
@@ -49,7 +50,7 @@ def read_stacks(image):
     cards = []
     card_names = []
     for file_iterator in glob.glob(CONFIG["card_filename"]):
-        card_name = file_iterator.rsplit("/", 1)[1].split(".")[0]
+        card_name = Path(file_iterator).stem
         card_names.append(card_name)
         cards.append(cv2.imread(file_iterator))
 
