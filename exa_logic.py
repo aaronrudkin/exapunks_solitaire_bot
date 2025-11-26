@@ -410,8 +410,8 @@ class Game(object):
             else:
                 cards_move = self.stacks[i].resolve_move_from(0)
 
-            y_offset_pre = len(self.stacks[i].stack) - len(cards_move)
-            y_offset_post = max(0, len(self.stacks[j].stack) - 1)
+            y_offset_pre = len(self.stacks[i].stack)
+            y_offset_post = len(self.stacks[j].stack)
 
             # The text we're going to print
             unlock_text = ""
