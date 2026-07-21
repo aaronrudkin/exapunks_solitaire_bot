@@ -1,6 +1,6 @@
 mss==4.0.3
 opencv-python==4.8.1.78
 numpy==1.22.0
-Pillow==12.2.0
+Pillow==12.3.0
 PyAutoGUI==0.9.47
 six==1.11.0
